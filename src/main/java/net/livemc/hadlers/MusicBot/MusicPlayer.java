@@ -41,5 +41,13 @@ public class MusicPlayer {
         listener.nextTrack();
     }
 
+    public synchronized void pauseTrack(){
+        listener.onPlayerPause(audioPlayer);
+    }
+
+    public synchronized void resumeTrack(){
+        listener.onPlayerResume(audioPlayer);
+    }
+
 
 }

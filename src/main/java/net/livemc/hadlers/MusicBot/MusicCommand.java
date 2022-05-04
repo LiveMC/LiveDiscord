@@ -20,7 +20,7 @@ public class MusicCommand extends ListenerAdapter {
         TextChannel textChannel = event.getTextChannel();
         if (event.getAuthor().isBot()) return;
         if (event.getMessage().getContentRaw().startsWith("!play")) {
-            if (!guild.getAudioManager().isConnected()) {
+            if (!guild.getAudioManager().isConnected() || event.getMember().getVoiceState().getChannel() == null) {
                 AudioChannel audioChannel = guild.getMember(user).getVoiceState().getChannel();
                 if (audioChannel == null) {
                     event.getMessage().delete().queue();
@@ -30,29 +30,66 @@ public class MusicCommand extends ListenerAdapter {
                 guild.getAudioManager().openAudioConnection(audioChannel);
             }
             manager.loadTrack(textChannel, command.replaceFirst("!play ", ""));
+            textChannel.sendMessage("**->** El usuario **" + user.getName() + "** acaba de colocar una pista en la cola.").queue();
             event.getMessage().delete().queue();
         }
-        else if(event.getMessage().getContentRaw().startsWith("!skip")){
+        else if(event.getMessage().getContentRaw().equalsIgnoreCase("!skip")){
+            if(event.getMember().getVoiceState().getChannel() == null){
+                textChannel.sendMessage("Debes conectarte a un canal de voz").queue();
+                return;
+            }
             if(!guild.getAudioManager().isConnected()){
                 event.getMessage().delete().queue();
                 textChannel.sendMessage("No se puede skipear si no hay pista en curso").queue();
                 return;
             }
-
             manager.getPlayer(guild).skipTrack();
-            textChannel.sendMessage("La pista fue skipeada correctamente").queue();
+            textChannel.sendMessage("**->** El usuario **" + user.getName() + "** acaba de skipear una pista de la cola.").queue();
             event.getMessage().delete().queue();
         }
-        else if (event.getMessage().getContentRaw().startsWith("!clear")) {
+        else if (event.getMessage().getContentRaw().equalsIgnoreCase("!clear")) {
             MusicPlayer musicPlayer = manager.getPlayer(textChannel.getGuild());
+            if(event.getMember().getVoiceState().getChannel() == null){
+                textChannel.sendMessage("Debes conectarte a un canal de voz").queue();
+                return;
+            }
             if(musicPlayer.getListener().getTracks().isEmpty()){
                 event.getMessage().delete().queue();
                 textChannel.sendMessage("En la lista no hay nada por lo que no se puede procesar").queue();
                 return;
             }
             musicPlayer.getListener().getTracks().clear();
-            textChannel.sendMessage("Todas las pistas fueron eliminadas.").queue();
+            textChannel.sendMessage("**->** El usuario **" + user.getName() + "** acaba de eliminar las pistas de la cola.").queue();
 
+            event.getMessage().delete().queue();
+        }
+        else if(event.getMessage().getContentRaw().equalsIgnoreCase("!pause") || event.getMessage().getContentRaw().equalsIgnoreCase("!stop")) {
+            if(event.getMember().getVoiceState().getChannel() == null){
+                textChannel.sendMessage("Debes conectarte a un canal de voz").queue();
+                return;
+            }
+            if (!guild.getAudioManager().isConnected()) {
+                event.getMessage().delete().queue();
+                textChannel.sendMessage("No se puede pausar si no hay pista en curso").queue();
+                return;
+            }
+
+            manager.getPlayer(guild).pauseTrack();
+            textChannel.sendMessage("**->** El usuario **" + user.getName() + "** acaba de pausar la pista.").queue();
+            event.getMessage().delete().queue();
+        }
+        else if(event.getMessage().getContentRaw().equalsIgnoreCase("!resume")){
+            if(event.getMember().getVoiceState().getChannel() == null){
+                textChannel.sendMessage("Debes conectarte a un canal de voz").queue();
+                return;
+            }
+            if(!guild.getAudioManager().isConnected()){
+                event.getMessage().delete().queue();
+                textChannel.sendMessage("No se puede reanudar si no hay pista en curso").queue();
+                return;
+            }
+            manager.getPlayer(guild).resumeTrack();
+            textChannel.sendMessage("**->** El usuario **" + user.getName() + "** acaba de reanudar la pista.").queue();
             event.getMessage().delete().queue();
         }
     }

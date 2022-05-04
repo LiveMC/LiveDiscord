@@ -35,7 +35,7 @@ public class MusicManager {
         manager.loadItemOrdered(player, source, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
-                channel.sendMessage("Nombre de la pista " + track.getInfo().title + ".").queue();
+                channel.sendMessage("Nombre de la pista **" + track.getInfo().title + "**.").queue();
                 player.playTrack(track);
             }
 
@@ -54,7 +54,7 @@ public class MusicManager {
 
             @Override
             public void noMatches() {
-                channel.sendMessage("La pista " + source + " no fue encontrada.").queue();
+                channel.sendMessage("La pista **" + source + "** no fue encontrada.").queue();
             }
 
             @Override

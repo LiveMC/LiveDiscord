@@ -32,6 +32,16 @@ public class AudioListener extends AudioEventAdapter {
     }
 
     @Override
+    public void onPlayerPause(AudioPlayer player) {
+        musicPlayer.getAudioPlayer().setPaused(true);
+    }
+
+    @Override
+    public void onPlayerResume(AudioPlayer player) {
+        musicPlayer.getAudioPlayer().setPaused(false);
+    }
+
+    @Override
     public void onTrackEnd(AudioPlayer player, com.sedmelluq.discord.lavaplayer.track.AudioTrack track, AudioTrackEndReason endReason) {
         if(endReason.mayStartNext) nextTrack();
     }
