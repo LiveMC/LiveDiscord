@@ -35,21 +35,25 @@ public class MusicManager {
         manager.loadItemOrdered(player, source, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
+                System.out.println("DEBUG CON ENLACE");
                 channel.sendMessage("Nombre de la pista **" + track.getInfo().title + "**.").queue();
                 player.playTrack(track);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
-                StringBuilder builder = new StringBuilder();
-                builder.append("Entrando a la cola la siguiente playlist **").append(playlist.getName()).append("**\n");
 
-                for(int i = 0; i < playlist.getTracks().size() && i < 5; i++){
-                    AudioTrack track = playlist.getTracks().get(i);
-                    builder.append("\n **->** ").append(track.getInfo().title);
-                    player.playTrack(track);
+                System.out.println("DEBUG SIN ENLACE");
+                AudioTrack firstTrack = playlist.getSelectedTrack();
+
+                if (firstTrack == null) {
+                    firstTrack = playlist.getTracks().get(0); ;
                 }
-                channel.sendMessage(builder.toString()).queue();
+
+                channel.sendMessage("Nombre de la pista **" + firstTrack.getInfo().title + "**.").queue();
+                System.out.println(firstTrack.getInfo().title + " - " + firstTrack.getPosition());
+
+                player.playTrack(firstTrack);
             }
 
             @Override

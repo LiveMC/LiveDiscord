@@ -14,6 +14,7 @@ import net.livemc.commands.LiveStream.AddStreamerCommand;
 import net.livemc.commands.LiveStream.ReloadConfigCommand;
 import net.livemc.commands.LiveStream.RemoveStreamerCommand;
 import net.livemc.commands.LiveStream.SetAnnounceChannelCommand;
+import net.livemc.commands.MusicCommand.*;
 import net.livemc.hadlers.AutoRoleReaction;
 import net.livemc.hadlers.JoinMember;
 import net.livemc.hadlers.LeaveMember;
@@ -74,7 +75,12 @@ public class LiveDiscord {
                 new AddStreamerCommand(),
                 new RemoveStreamerCommand(),
                 new ReloadConfigCommand(),
-                new SetAnnounceChannelCommand()
+                new SetAnnounceChannelCommand(),
+                new AddMusicToQueue(),
+                new ClearMusicOfQueue(),
+                new SkipMusicOfQueue(),
+                new PauseMusicCurrent(),
+                new ResumeMusicCurrent()
         );
         CommandClientImpl client = (CommandClientImpl) builder.build();
         jdaBuilder.addEventListeners(client, new ReadyStatus())

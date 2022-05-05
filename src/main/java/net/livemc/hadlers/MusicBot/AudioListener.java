@@ -33,6 +33,7 @@ public class AudioListener extends AudioEventAdapter {
 
     @Override
     public void onPlayerPause(AudioPlayer player) {
+        System.out.println("DEBUG PAUSE TRACK");
         musicPlayer.getAudioPlayer().setPaused(true);
     }
 
