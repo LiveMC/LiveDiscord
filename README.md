@@ -11,13 +11,6 @@
 <h2 align="left"> LiveMC Network | Features</h2>
 <br>
 
-- Join member role
-- Welcome-Goodbye message
-- Json support
-- Announce Twitch (By @Ryzeon)
-- Music bot (Lib: LavaPlayer)
-- AutoRole (Embed and Button)
-- ReadyStatus with Config
 
 <h2 align="center"> LiveMC Network | Members</h3>
 
