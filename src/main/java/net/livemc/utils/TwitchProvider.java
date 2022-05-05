@@ -50,8 +50,7 @@ public class TwitchProvider {
     public void listen(String streamer) {
         System.out.println("LISTENING TO " + streamer);
         client.getClientHelper().enableStreamEventListener(streamer);
-        if (!LiveDiscord.getInstance().getTwitchApp().getStreamers_to_announce().contains(streamer)) {
-            LiveDiscord.getInstance().getTwitchApp().getStreamers_to_announce().add(streamer);
+        if (LiveDiscord.getInstance().getTwitchApp().getStreamers_to_announce().add(streamer)) {
             JsonConfig.save(LiveDiscord.getInstance().getTwitchApp());
         }
     }
@@ -59,15 +58,14 @@ public class TwitchProvider {
     public void unlisten(String streamer) {
         System.out.println("UNLISTENING TO " + streamer);
         client.getClientHelper().disableStreamEventListener(streamer);
-        if (LiveDiscord.getInstance().getTwitchApp().getStreamers_to_announce().contains(streamer)) {
-            LiveDiscord.getInstance().getTwitchApp().getStreamers_to_announce().remove(streamer);
+        if (LiveDiscord.getInstance().getTwitchApp().getStreamers_to_announce().remove(streamer)) {
             JsonConfig.save(LiveDiscord.getInstance().getTwitchApp());
         }
     }
 
     public boolean checkIfStreamerExists(String streamer) {
         UserList list = client.getHelix().getUsers(null, null, Arrays.asList(streamer)).execute();
-        return list.getUsers().size() > 0;
+        return !list.getUsers().isEmpty();
 
     }
 }
